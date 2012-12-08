@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Helply</string>
+    <string name="helpTxtHint">What do you need help with?</string>
+    <string name="googleMapApiKey">0XGLEZArObE7H83pVw0qd0zzW37FKjzczHbvMFw</string>
+
+    <string-array name="main_menu_items">
+        <item>Post Help</item>
+        <item>See who needs help</item>
+        <item>Disconnect</item>
+    </string-array>
+    
+</resources>

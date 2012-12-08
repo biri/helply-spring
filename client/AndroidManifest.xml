@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mta.sadna"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="15" />
+
+    <permission
+        android:name="com.mta.sadna.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+	<uses-permission android:name="com.mta.sadna.permission.C2D_MESSAGE" />
+    <!-- receives GCM messages -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- GCM connects to Google services -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<!-- GCM requires a Google account -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.READ_OWNER_DATA" />
+    <!-- wake the processor if a GCM message is received -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<!-- GeoLoqi -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />	
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+	
+    <application
+        android:name=".MainApplication"
+        android:icon="@drawable/spring_android"
+        android:label="@string/app_name" >
+        
+        <uses-library android:name="com.google.android.maps"/>
+
+        <activity
+            android:name="com.mta.sadna.activities.SignInActivity"
+            android:label="@string/app_name"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity 
+            android:name="com.mta.sadna.activities.MainActivity">
+            <meta-data 
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mta.sadna.activities.SignInActivity"/>
+        </activity>
+		<activity 
+		    android:name="com.mta.sadna.activities.PostHelpActivity">
+            <meta-data 
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mta.sadna.activities.MainActivity"/>		    
+		</activity>
+		<activity 
+		    android:name="com.mta.sadna.activities.PostsMapActivity" 
+		    android:theme="@android:style/Theme.NoTitleBar">
+            <meta-data 
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mta.sadna.activities.MainActivity"/>			    
+		</activity>
+        <activity 
+            android:name="com.mta.sadna.activities.NotificationActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true">            
+            <meta-data 
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mta.sadna.activities.MainActivity"/>
+        </activity>		
+		<activity
+            android:name="com.mta.sadna.activities.facebook.FacebookWebOAuthActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true">
+		</activity>
+
+		<!-- Geoloqi SDK service -->
+        <service
+            android:name="com.geoloqi.android.sdk.service.LQService"
+            android:exported="false" />
+		
+		<!-- GCM intent service and receiver -->
+        <service android:name=".gcm.GCMIntentService" />
+		<receiver android:name=".receiver.GCMReceiver" 
+		    android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.mta.sadna" />  
+            </intent-filter>   
+        </receiver>
+        
+		<!-- BroadCast Receivers -->
+        <receiver android:name=".receiver.PostsReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="POST_NOTIFICATION" >
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.AcceptReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACCEPT_NOTIFICATION" >
+                </action>
+            </intent-filter>
+        </receiver>                
+    </application>
+</manifest>
