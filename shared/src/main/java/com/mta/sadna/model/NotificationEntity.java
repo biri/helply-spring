@@ -15,6 +15,7 @@ public class NotificationEntity implements Serializable
 	private HelpCategory category;
 	private double latitude;
 	private double longitude;
+	private String triggerId;
 	
 	public String getFacebookId()
 	{
@@ -72,6 +73,14 @@ public class NotificationEntity implements Serializable
 	{
 		this.longitude = longitude;
 	}
+	public String getTriggerId()
+	{
+		return triggerId;
+	}
+	public void setTriggerId(String triggerId)
+	{
+		this.triggerId = triggerId;
+	}
 	
 	@Override
     public int hashCode()
@@ -88,6 +97,7 @@ public class NotificationEntity implements Serializable
 	    temp = Double.doubleToLongBits(longitude);
 	    result = prime * result + (int) (temp ^ (temp >>> 32));
 	    result = prime * result + ( (message == null) ? 0 : message.hashCode());
+	    result = prime * result + ( (triggerId == null) ? 0 : triggerId.hashCode());
 	    return result;
     }
 	
@@ -163,6 +173,17 @@ public class NotificationEntity implements Serializable
 	    {
 		    return false;
 	    }
+	    if (triggerId == null)
+	    {
+		    if (other.triggerId != null)
+		    {
+			    return false;
+		    }
+	    }
+	    else if (!triggerId.equals(other.triggerId))
+	    {
+		    return false;
+	    }
 	    return true;
     }
 	
@@ -174,6 +195,6 @@ public class NotificationEntity implements Serializable
 	            (lastName != null ? "lastName=" + lastName + ", " : "") +
 	            (message != null ? "message=" + message + ", " : "") +
 	            (category != null ? "category=" + category + ", " : "") + "latitude=" + latitude + ", longitude=" +
-	            longitude + "]";
+	            longitude + ", " + (triggerId != null ? "triggerId=" + triggerId : "") + "]";
     }
 }

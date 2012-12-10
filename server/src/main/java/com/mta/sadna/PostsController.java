@@ -79,6 +79,7 @@ public class PostsController
 		locationVals.put("lon", helpPost.getLongitude());
 
 		client.prepareIndex("helpposts", "post")
+			.setId(helpPost.getTriggerId())
 			.setSource(jsonBuilder()
                 .startObject()
                     .field("userId", helpPost.getUserId())
@@ -86,6 +87,7 @@ public class PostsController
                     .field("date", System.currentTimeMillis())
                     .field("category", helpPost.getCategory())
                     .field("location", locationVals)
+                    .field("triggerId", helpPost.getTriggerId())
                 .endObject())
 		    .execute()
 		    .actionGet();
@@ -141,6 +143,7 @@ public class PostsController
 		HelpPost helpPost = new HelpPost();
 		helpPost.setUserId(jsonElment.getAsJsonObject().get("userId").getAsLong());
 		helpPost.setFreeText(jsonElment.getAsJsonObject().get("text").getAsString());
+		helpPost.setTriggerId(jsonElment.getAsJsonObject().get("triggerId").getAsString());
 		helpPost.setCategory(HelpCategory.valueOf(jsonElment.getAsJsonObject().get("category").getAsString()));
 		helpPost.setLatitude(((JsonObject)jsonElment.getAsJsonObject().get("location")).get("lat").getAsDouble());
 		helpPost.setLongitude(((JsonObject)jsonElment.getAsJsonObject().get("location")).get("lon").getAsDouble());
@@ -156,6 +159,15 @@ public class PostsController
 		String triggerId = jsonElment.getAsJsonObject().get("trigger")
 				.getAsJsonObject().get("trigger_id").getAsString();
 		logger.info("Triggered id = " + triggerId + " was invoked");
+		
+		if (!doesHelpPostExist(triggerId))
+		{
+			logger.info("Triggered id = " + triggerId 
+					+ " does not exist, trigger will be ignored");
+			return "";
+		}
+		logger.info("Triggered id = " + triggerId 
+				+ " exists, notification will be sent");
 		
 		String triggeredUserGlId = jsonElment.getAsJsonObject().get("user")
 				.getAsJsonObject().get("user_id").getAsString();
@@ -199,8 +211,8 @@ public class PostsController
 		logger.info("Place longitude = " + placeLongitude);
 		
 		String[] split = message.split("-------");
-		NotificationEntity notification = buildPostNotificationEntity(placeOwnerUser, split[0],
-				split[1], placeLatitude, placeLongitude);
+		NotificationEntity notification = buildPostNotificationEntity(triggerId,
+				placeOwnerUser, split[0], split[1], placeLatitude, placeLongitude);
 		
 		sendGcmMessage(triggeredUser.getGcmRegId(), "post", gson.toJson(notification));
 		logger.info("sent post notification message");
@@ -213,7 +225,8 @@ public class PostsController
 			@RequestParam(required=true) String firstName,
 			@RequestParam(required=true) String lastName,
 			@RequestParam(required=true) double latitude,
-			@RequestParam(required=true) double longitude) 
+			@RequestParam(required=true) double longitude,
+			@RequestParam(required=true) String triggerId) 
 				throws ElasticSearchException, IOException
 	{
 		logger.info("about to send accept message to " + facebookId);
@@ -222,8 +235,30 @@ public class PostsController
 				lastName, latitude, longitude);
 		boolean result = sendGcmMessage(user.getGcmRegId(), "accept", gson.toJson(notification));
 		logger.info("sent accept notification message");
+		
+		logger.info("about to delete a post with trigger id " + triggerId);
+		deleteHelpPost(triggerId);
+		logger.info("deleted a post with trigger id " + triggerId);
 		return result;
 	}
+	
+	private boolean doesHelpPostExist(String triggerId) 
+			throws ElasticSearchException, IOException
+	{
+		Node node = nodeBuilder().client(true).node();
+		Client client = node.client();		
+
+		SearchResponse response = client.prepareSearch().setFilter(FilterBuilders
+									.termsFilter("triggerId", triggerId.toLowerCase()))
+									.execute().actionGet();
+		
+		SearchHit[] hits = response.getHits().getHits();
+		client.close();
+		
+		if (hits == null || hits.length == 0)
+			return false;
+		return true;		
+	}	
 
 	private User getUser(String fieldName, String fieldValue) 
 			throws ElasticSearchException, IOException
@@ -275,8 +310,9 @@ public class PostsController
 		return false;
 	}
 	
-	private NotificationEntity buildPostNotificationEntity(User placeOwnerUser, String message,
-			String category, double placeLatitude, double placeLongitude)
+	private NotificationEntity buildPostNotificationEntity(String triggerId,
+			User placeOwnerUser, String message, String category, 
+			double placeLatitude, double placeLongitude)
     {
 		NotificationEntity notification = new NotificationEntity();
 		notification.setFacebookId(placeOwnerUser.getFacebookId());
@@ -286,6 +322,7 @@ public class PostsController
 		notification.setCategory(HelpCategory.valueOf(category));
 		notification.setLatitude(placeLatitude);
 		notification.setLongitude(placeLongitude);
+		notification.setTriggerId(triggerId);
 		return notification;
     }
 	
@@ -323,6 +360,16 @@ public class PostsController
 			return false;
 		}
 		return true;
+    }
+	
+	private void deleteHelpPost(String triggerId)
+    {
+		logger.info("About to delete help post with trigger id - " + triggerId);
+		Node node = nodeBuilder().client(true).node();
+		Client client = node.client();
+		client.prepareDelete("helpposts", "post", triggerId);
+		client.close();
+		logger.info("Deleted helppost - " + triggerId);
     }
 	
 	

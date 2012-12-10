@@ -22,6 +22,7 @@ public class PostsReceiver extends AbstractReceiver
 		Log.i(TAG, "GCM post message = " + gcmMessage);
 		NotificationEntity notificationJson = 
 				gson.fromJson(gcmMessage, NotificationEntity.class);
+		Log.i(TAG, "notificationJson = " + notificationJson.toString());
 		
 		Intent intent = new Intent(context, NotificationActivity.class);
 		intent.putExtra("data", notificationJson);

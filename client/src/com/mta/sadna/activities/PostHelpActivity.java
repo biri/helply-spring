@@ -111,9 +111,19 @@ public class PostHelpActivity extends AbstractAsyncActivity
 
 	private void getLastKnownLocation()
 	{
-		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		this.latitude = lastKnownLocation.getLatitude();
-		this.longitude = lastKnownLocation.getLongitude();
+		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); 
+		if (lastKnownLocation == null)
+		{
+			Log.i(TAG, "NETWORK_PROVIDER gave null");
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+		
+		if (lastKnownLocation != null)
+		{
+			this.latitude = lastKnownLocation.getLatitude();
+			this.longitude = lastKnownLocation.getLongitude();
+			Log.i(TAG, "Got the location from last known");
+		}
 	}
 
 	private void showResult(Boolean result)
@@ -180,9 +190,6 @@ public class PostHelpActivity extends AbstractAsyncActivity
 		@Override
 		protected Boolean doInBackground(Void... params)
 		{
-			// save post to DB
-			saveHelpPostToDB();
-
 			// create facebook post
 			facebookApi.feedOperations().updateStatus(
 			        helpPost.getUserId() + "-" + helpPost.getCategory() 
@@ -192,27 +199,6 @@ public class PostHelpActivity extends AbstractAsyncActivity
 			buildGeoLoqiPlace();
 
 			return true;
-		}
-
-		private void saveHelpPostToDB()
-		{
-			try
-			{
-				final String url = PostHelpActivity.this.getApplicationContext()
-						.getRestBaseUrl() + "/posthelp";
-
-				HttpHeaders requestHeaders = new HttpHeaders();
-				requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-				HttpEntity<HelpPost> requestEntity = new HttpEntity<HelpPost>(helpPost, requestHeaders);
-
-				RestTemplate restTemplate = new RestTemplate();
-				restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-				restTemplate.exchange(new URI(url), HttpMethod.POST, requestEntity, Boolean.class);
-			}
-			catch (Exception e)
-			{
-				Log.e(TAG, e.getMessage(), e);
-			}
 		}
 
 		private void buildGeoLoqiPlace()
@@ -287,16 +273,7 @@ public class PostHelpActivity extends AbstractAsyncActivity
 				@Override
 				public void onComplete(LQSession arg0, JSONObject arg1, Header[] arg2, StatusLine arg3)
 				{
-					try
-                    {
-	                    Log.i(TAG, "trigger_id=" + 
-	                    		arg1.getString("trigger_id"));
-                    }
-                    catch (JSONException e)
-                    {
-                    	Log.e(TAG, "Failed to get the " +
-                    			"trigger id - " + e.getMessage());
-                    }
+					Log.i(TAG, "successfully created trigger");
 				}
 
 				@Override
@@ -306,11 +283,51 @@ public class PostHelpActivity extends AbstractAsyncActivity
 				}
 
 				@Override
-				public void onSuccess(LQSession arg0, JSONObject arg1, Header[] arg2)
+				public void onSuccess(LQSession arg0, final JSONObject arg1, Header[] arg2)
 				{
-					Log.i(TAG, "successfully created trigger");
+					Thread trd = new Thread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							try
+		                    {
+								String triggerId = arg1.getString("trigger_id");
+			                    Log.i(TAG, "trigger_id=" + triggerId);
+			        			saveHelpPostToDB(triggerId);
+		                    }
+		                    catch (JSONException e)
+		                    {
+		                    	Log.e(TAG, "Failed to get the " +
+		                    			"trigger id - " + e.getMessage());
+		                    }
+						}
+					});
+					trd.start();
 				}
 			});
+		}
+		
+		private void saveHelpPostToDB(String triggerId)
+		{
+			try
+			{
+				helpPost.setTriggerId(triggerId);
+				final String url = PostHelpActivity.this.getApplicationContext()
+						.getRestBaseUrl() + "/posthelp";
+
+				HttpHeaders requestHeaders = new HttpHeaders();
+				requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<HelpPost> requestEntity = new HttpEntity<HelpPost>(helpPost, requestHeaders);
+
+				RestTemplate restTemplate = new RestTemplate();
+				restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
+				restTemplate.exchange(new URI(url), HttpMethod.POST, requestEntity, Boolean.class);
+			}
+			catch (Exception e)
+			{
+				Log.e(TAG, e.getMessage(), e);
+			}
 		}
 
 		@Override

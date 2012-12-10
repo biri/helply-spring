@@ -149,14 +149,22 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 	{
 		Log.i(TAG, "About to get last known location");
 		
-		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		this.latitude = lastKnownLocation.getLatitude();
-		this.longitude = lastKnownLocation.getLongitude();
+		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); 
+		if (lastKnownLocation == null)
+		{
+			Log.i(TAG, "NETWORK_PROVIDER gave null");
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
 		
-		Log.i(TAG, "Got last known location");
-		
-		zoomMapByLatLon(this.latitude, this.longitude);
-		doOnLocationChanged(lastKnownLocation);
+		if (lastKnownLocation != null)
+		{
+			this.latitude = lastKnownLocation.getLatitude();
+			this.longitude = lastKnownLocation.getLongitude();
+			Log.i(TAG, "Got the location from last known");
+			
+			zoomMapByLatLon(this.latitude, this.longitude);
+			doOnLocationChanged(lastKnownLocation);			
+		}
 	}
 
 	protected void addOverlayToMap(double latitude, double longitude,

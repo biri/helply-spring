@@ -37,6 +37,7 @@ public class NotificationActivity extends HelplyMapActivity
 {
 	private String message;
 	private Bitmap userImg;
+	private String triggerId;
 	private String userFullName;	
 	private double userLatitude;
 	private double userLongitude;
@@ -60,15 +61,19 @@ public class NotificationActivity extends HelplyMapActivity
 			bindBtnEvents();
 			NotificationEntity intentData = (NotificationEntity)getIntent()
 					.getExtras().get("data");
+			Log.i(TAG, "NotificationEntity as string = " + intentData.toString());
 			
 			Log.i(TAG, "About to fill data from intent");
 			message = intentData.getMessage();
 			category = intentData.getCategory();
+			triggerId = intentData.getTriggerId();
 			userFacebookId = intentData.getFacebookId();
 			userLatitude = intentData.getLatitude();
 			userLongitude = intentData.getLongitude();
 			userFullName = intentData.getFirstName() 
 					+ " " + intentData.getLastName();
+			
+			Log.i(TAG, "the geoloqi trigger - " + triggerId);
 		}
 		catch(Exception e)
 		{
@@ -200,7 +205,8 @@ public class NotificationActivity extends HelplyMapActivity
 						"firstName=" + getMainApplication().getData("firstName") + "&" +
 						"lastName=" + getMainApplication().getData("lastName") + "&" +
 						"latitude=" + latitude + "&" +
-						"longitude=" + longitude;
+						"longitude=" + longitude + "&" +
+						"triggerId=" + triggerId;
 
 				RestTemplate restTemplate = new RestTemplate();
 				restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
