@@ -154,7 +154,7 @@ public class PostsMapActivity extends HelplyMapActivity
 			{
 				addOverlayToMap(helpPost.getLatitude(), helpPost.getLongitude(),
 						helpPost.getCategory().toString(), helpPost.getFreeText(),
-						userProfileImage.get(helpPost.getUserId()));
+						helpPost, userProfileImage.get(helpPost.getUserId()));
 			}
 			
 			zoomMapByLatLon(PostsMapActivity.this.latitude,
@@ -166,7 +166,7 @@ public class PostsMapActivity extends HelplyMapActivity
 			String firstName = getMainApplication().getData("firstName").toString();
 			String lastName = getMainApplication().getData("lastName").toString();
 			Bitmap profileImg = (Bitmap)getMainApplication().getData("profilePicture");
-			addOverlayToMap(latitude, longitude, "Me",
+			addOverlayToMap(latitude, longitude, "You are here",
 					firstName + " " + lastName, profileImg);			
 		}
 	}

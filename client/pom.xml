@@ -44,6 +44,11 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
+		    <groupId>android.app.support</groupId>
+		    <artifactId>android-support</artifactId>
+		    <version>3.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.geoloqi.android</groupId>
 			<artifactId>geoloqi-sdk</artifactId>
 			<version>1.0</version>

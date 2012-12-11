@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 
 import com.mta.sadna.R;
@@ -28,13 +30,19 @@ public class PostsReceiver extends AbstractReceiver
 		intent.putExtra("data", notificationJson);
 		
 		PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
-		Notification noti = new Notification.Builder(context)
-		        .setContentTitle(buildTitle(notificationJson))
+		Builder notiBuilder = new NotificationCompat.Builder(context)
+				.setSmallIcon(R.drawable.spring_android)
+				.setContentTitle(buildTitle(notificationJson))
 		        .setContentText(notificationJson.getMessage())
-		        .setSmallIcon(R.drawable.spring_android)
 		        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-		        .setContentIntent(pIntent).getNotification();
+		        .setContentIntent(pIntent);
+		
+		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+		inboxStyle.setBigContentTitle(buildTitle(notificationJson));
+		inboxStyle.setSummaryText(notificationJson.getMessage());
+		notiBuilder.setStyle(inboxStyle);
 		  
+		Notification noti = notiBuilder.build();
 		NotificationManager notificationManager = 
 		  (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

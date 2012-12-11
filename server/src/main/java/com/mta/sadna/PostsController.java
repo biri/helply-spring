@@ -364,12 +364,10 @@ public class PostsController
 	
 	private void deleteHelpPost(String triggerId)
     {
-		logger.info("About to delete help post with trigger id - " + triggerId);
 		Node node = nodeBuilder().client(true).node();
 		Client client = node.client();
-		client.prepareDelete("helpposts", "post", triggerId);
+		client.prepareDelete("helpposts", "post", triggerId).execute();
 		client.close();
-		logger.info("Deleted helppost - " + triggerId);
     }
 	
 	

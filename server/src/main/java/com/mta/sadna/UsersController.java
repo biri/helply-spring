@@ -76,7 +76,7 @@ public class UsersController
 		logger.info("About to delete user - " + facebookId);
 		Node node = nodeBuilder().client(true).node();
 		Client client = node.client();
-		client.prepareDelete("users", "user", facebookId);
+		client.prepareDelete("users", "user", facebookId).execute();
 		client.close();
 		logger.info("Deleted user - " + facebookId);
     }

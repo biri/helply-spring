@@ -111,11 +111,12 @@ public class PostHelpActivity extends AbstractAsyncActivity
 
 	private void getLastKnownLocation()
 	{
-		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); 
+		Log.i(TAG, "About to get last known location");
+		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); 
 		if (lastKnownLocation == null)
 		{
-			Log.i(TAG, "NETWORK_PROVIDER gave null");
-			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Log.i(TAG, "GPS_PROVIDER gave null");
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
 		
 		if (lastKnownLocation != null)

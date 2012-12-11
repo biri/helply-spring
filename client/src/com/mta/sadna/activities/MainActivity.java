@@ -105,17 +105,20 @@ public class MainActivity extends AbstractMenuActivity
 				{
 					case 0:
 						cls = PostHelpActivity.class;
+						startActivity(new Intent(parentView.getContext(), cls));
 						break;
 					case 1:
 						cls = PostsMapActivity.class;
+						startActivity(new Intent(parentView.getContext(), cls));
 						break;
 					case 2:
 						disconnect();
 						cls = SignInActivity.class;
+						startActivity(new Intent(parentView.getContext(), cls));
+						finish();
 					default:
 						break;
 				}
-				startActivity(new Intent(parentView.getContext(), cls));
 			}
 		};
 	}

@@ -19,10 +19,11 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.mta.sadna.AsyncActivity;
 import com.mta.sadna.MainApplication;
 import com.mta.sadna.R;
+import com.mta.sadna.activities.dto.PostOverlayItem;
+import com.mta.sadna.model.HelpPost;
 
 public abstract class HelplyMapActivity extends MapActivity implements AsyncActivity
 {
@@ -53,12 +54,12 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 		Log.i(TAG, "Init Map");
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
-		mapView.getController().setZoom(15);
+		mapView.getController().setZoom(18);
 
 		Log.i(TAG, "Init overlays");
 		List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(R.drawable.spring_android);
-		postsOverlays = new PostsOverlays(drawable, this);
+		postsOverlays = new PostsOverlays(drawable, this, mapView);
 		mapOverlays.add(postsOverlays);
 
 		Log.i(TAG, "About to call child init");
@@ -148,12 +149,11 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 	private void getLastKnownLocation()
 	{
 		Log.i(TAG, "About to get last known location");
-		
-		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); 
+		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); 
 		if (lastKnownLocation == null)
 		{
-			Log.i(TAG, "NETWORK_PROVIDER gave null");
-			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Log.i(TAG, "GPS_PROVIDER gave null");
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
 		
 		if (lastKnownLocation != null)
@@ -166,12 +166,23 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 			doOnLocationChanged(lastKnownLocation);			
 		}
 	}
-
+	
 	protected void addOverlayToMap(double latitude, double longitude,
 			String subject, String text, Bitmap pictute)
 	{
+		addOverlayToMap(latitude, longitude, subject, text, null, pictute);	
+	}
+	
+	protected void addOverlayToMap(double latitude, double longitude,
+			String subject, String text, HelpPost helpPost, Bitmap pictute)
+	{
+		PostOverlayItem overlayitem = null;
 		GeoPoint point = new GeoPoint(getMicrodegrees(latitude), getMicrodegrees(longitude));
-		OverlayItem overlayitem = new OverlayItem(point,subject, text);
+		if (helpPost == null)
+			overlayitem = new PostOverlayItem(point,subject, text);
+		else
+			overlayitem = new PostOverlayItem(point,subject, text, helpPost);
+		
 		postsOverlays.addOverlay(overlayitem, new BitmapDrawable(getResources(), pictute));		
 	}
 	
@@ -199,4 +210,9 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 	    mapView.getController().setCenter(new GeoPoint(getMicrodegrees(latitude), 
 				getMicrodegrees(longitude)));
     }
+	
+	protected void refreshMap()
+	{
+		mapView.invalidate();
+	}
 }
