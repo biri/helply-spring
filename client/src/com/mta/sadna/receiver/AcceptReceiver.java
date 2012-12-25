@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 
 import com.mta.sadna.R;
-import com.mta.sadna.activities.MainActivity;
+import com.mta.sadna.activities.PostsMapActivity;
 import com.mta.sadna.model.NotificationEntity;
 
 public class AcceptReceiver extends AbstractReceiver
@@ -25,10 +25,10 @@ public class AcceptReceiver extends AbstractReceiver
 		NotificationEntity notificationJson = 
 				gson.fromJson(gcmMessage, NotificationEntity.class);
 		
-		Intent intent = new Intent(context, MainActivity.class);
+		Intent intent = new Intent(context, PostsMapActivity.class);
 		PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		Builder notiBuilder = new NotificationCompat.Builder(context)
-				.setSmallIcon(R.drawable.spring_android)
+				.setSmallIcon(R.drawable.appbutton)
 				.setContentTitle("Help is on the way!")
 		        .setContentText(buildNotificationText(notificationJson))
 		        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))

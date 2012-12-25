@@ -58,7 +58,7 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 
 		Log.i(TAG, "Init overlays");
 		List<Overlay> mapOverlays = mapView.getOverlays();
-		Drawable drawable = this.getResources().getDrawable(R.drawable.spring_android);
+		Drawable drawable = this.getResources().getDrawable(R.drawable.appbutton);
 		postsOverlays = new PostsOverlays(drawable, this, mapView);
 		mapOverlays.add(postsOverlays);
 
@@ -191,6 +191,7 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
 	{
 	    super.onDestroy();
 	    locationManager.removeUpdates(locationListener);
+	    onDescendantDestory();
 	}
 	
 	protected abstract void setContentView();
@@ -204,6 +205,11 @@ public abstract class HelplyMapActivity extends MapActivity implements AsyncActi
     {
         return;
     }
+	
+	protected void onDescendantDestory()
+	{
+		return;
+	}
 	
 	protected void zoomMapByLatLon(double latitude, double longitude)
     {

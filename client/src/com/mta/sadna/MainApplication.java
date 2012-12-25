@@ -109,10 +109,15 @@ public class MainApplication extends Application
 						{
 							geoLoqiSession = binder.getService().getSession();
 							if (geoLoqiSession == null)
+							{
 								handler.postDelayed(this, 1000);
+							}
 							else
+							{
+								geoLoqiSession.setAccessToken(getFromProperties("geoloqi_access_token"));
 								Log.i(TAG, "Got the geoloqi session - " +
 										geoLoqiSession.getAccessToken());
+							}
 						}
 					};
 					runnable.run();

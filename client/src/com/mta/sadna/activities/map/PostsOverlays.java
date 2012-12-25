@@ -71,6 +71,13 @@ public class PostsOverlays extends ItemizedOverlay<PostOverlayItem> implements A
 		setLastFocusedIndex(-1);
 		populate();
 	}
+	
+	public void clearAllOverlay()
+	{
+		postsOverlays.clear();
+		setLastFocusedIndex(-1);
+		populate();
+	}
 
 	@Override
 	protected boolean onTap(int index)

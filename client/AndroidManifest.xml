@@ -30,13 +30,14 @@
 	
     <application
         android:name=".MainApplication"
-        android:icon="@drawable/spring_android"
+        android:icon="@drawable/appbutton"
         android:label="@string/app_name" >
         
         <uses-library android:name="com.google.android.maps"/>
 
         <activity
             android:name="com.mta.sadna.activities.SignInActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:label="@string/app_name"
             android:noHistory="true">
             <intent-filter>
@@ -45,32 +46,21 @@
             </intent-filter>
         </activity>
         
-        <activity 
-            android:name="com.mta.sadna.activities.MainActivity">
-            <meta-data 
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mta.sadna.activities.SignInActivity"/>
-        </activity>
-		<activity 
-		    android:name="com.mta.sadna.activities.PostHelpActivity">
-            <meta-data 
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mta.sadna.activities.MainActivity"/>		    
-		</activity>
 		<activity 
 		    android:name="com.mta.sadna.activities.PostsMapActivity" 
 		    android:theme="@android:style/Theme.NoTitleBar">
             <meta-data 
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mta.sadna.activities.MainActivity"/>			    
+                android:value="com.mta.sadna.activities.SignInActivity"/>			    
 		</activity>
         <activity 
             android:name="com.mta.sadna.activities.NotificationActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:excludeFromRecents="true"
             android:noHistory="true">            
             <meta-data 
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mta.sadna.activities.MainActivity"/>
+                android:value="com.mta.sadna.activities.PostsMapActivity"/>
         </activity>		
 		<activity
             android:name="com.mta.sadna.activities.facebook.FacebookWebOAuthActivity"

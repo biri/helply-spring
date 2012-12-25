@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/blackgrunge"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp">
+
+		<Button
+		    android:id="@+id/logoffBtn"
+		    android:layout_width="80dp"
+		    android:layout_height="40dp"
+		    android:layout_alignParentRight="true"
+		    android:layout_centerVertical="true"
+		    android:layout_marginRight="5dp"
+		    android:background="@drawable/main_btn"
+		    android:text="Sign Out" />
+	           
+    </RelativeLayout>
+    
+    <com.google.android.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapview"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:apiKey="@string/googleMapApiKey"
+        android:clickable="true" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="57dp" >
+
+        <ImageButton
+            android:id="@+id/addHelp"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+             android:background="@drawable/blackgrunge"
+            android:contentDescription="addHelp"
+            android:src="@drawable/post_help" />
+
+        <ImageButton
+            android:id="@+id/refreshBtn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/blackgrunge"
+            android:contentDescription="refresh"
+            android:src="@drawable/refresh" />
+
+    </RelativeLayout>
+
+</LinearLayout>

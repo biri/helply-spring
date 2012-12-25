@@ -31,7 +31,7 @@ public class PostsReceiver extends AbstractReceiver
 		
 		PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		Builder notiBuilder = new NotificationCompat.Builder(context)
-				.setSmallIcon(R.drawable.spring_android)
+				.setSmallIcon(R.drawable.appbutton)
 				.setContentTitle(buildTitle(notificationJson))
 		        .setContentText(notificationJson.getMessage())
 		        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))

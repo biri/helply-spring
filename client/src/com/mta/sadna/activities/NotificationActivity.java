@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -92,8 +93,10 @@ public class NotificationActivity extends HelplyMapActivity
 	private void bindBtnEvents()
     {
 		Log.i(TAG, "Binding events");
+		Typeface font = Typeface.createFromAsset(getAssets(), "font/rooney.ttf");
 		
 		Button acceptBtn = (Button) findViewById(R.id.acceptBtn);
+		acceptBtn.setTypeface(font);
 		acceptBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -104,6 +107,7 @@ public class NotificationActivity extends HelplyMapActivity
 		});
 		
 		Button ignoreBtn = (Button) findViewById(R.id.IgnoreBtn);
+		ignoreBtn.setTypeface(font);
 		ignoreBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -150,7 +154,7 @@ public class NotificationActivity extends HelplyMapActivity
 	
 	private void goBackToMainActivity()
 	{
-		startActivity(new Intent(this, MainActivity.class));
+		startActivity(new Intent(this, PostsMapActivity.class));
 		finish();		
 	}
 	

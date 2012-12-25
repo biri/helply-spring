@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup"
+    android:background="@drawable/popup"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"     
+    android:padding="30dp"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/helpTxt"
         android:layout_width="match_parent"
         android:layout_height="130dp"
+        android:textColor="#000000"
         android:ems="10"
-        android:hint="@string/helpTxtHint">
+        android:hint="@string/helpTxtHint"
+        android:background="@drawable/edit_text_bg">
 
         <requestFocus />
     </EditText>
@@ -17,36 +23,45 @@
         android:id="@+id/radioOpts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/helpTxt">
+        android:layout_marginTop="45dp">
 
 	    <RadioButton
 	        android:id="@+id/stuckWithCarRbtn"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:text="Stuck With my car"
+	        android:text="Stuck with my car"
+	        android:textColor="#000000"
 	        android:checked="true"/>
 	
 	    <RadioButton
 	        android:id="@+id/drunkCantDriveRbtn"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:textColor="#000000"
 	        android:text="Drunk and can't drive"/>
 	
 	    <RadioButton
 	        android:id="@+id/needARideRbtn"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:textColor="#000000"
 	        android:text="Need a ride"/>
 	    
 	</RadioGroup>	    
 
-    <Button
-        android:id="@+id/submitBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Submit" />
+    <RelativeLayout 
+	    android:layout_width="match_parent"
+    	android:layout_height="match_parent">
 
-</RelativeLayout>
+       	<Button
+	        android:id="@+id/submitBtn"
+	        android:layout_width="80dp"
+	        android:layout_height="40dp"
+	        android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+	        android:background="@drawable/main_btn"
+	        android:text="Send" />
+       	
+    </RelativeLayout>
+
+</LinearLayout>

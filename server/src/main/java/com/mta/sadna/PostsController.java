@@ -6,7 +6,7 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +74,7 @@ public class PostsController
 		Node node = nodeBuilder().client(true).node();
 		Client client = node.client();
 
-		Map<String,Object> locationVals = new HashMap<String, Object>();
+		Map<String,Object> locationVals = new LinkedHashMap<String, Object>();
 		locationVals.put("lat", helpPost.getLatitude());
 		locationVals.put("lon", helpPost.getLongitude());
 
