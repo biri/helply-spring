@@ -38,7 +38,7 @@ public class NotificationActivity extends HelplyMapActivity
 {
 	private String message;
 	private Bitmap userImg;
-	private String triggerId;
+	private String postId;
 	private String userFullName;	
 	private double userLatitude;
 	private double userLongitude;
@@ -67,14 +67,14 @@ public class NotificationActivity extends HelplyMapActivity
 			Log.i(TAG, "About to fill data from intent");
 			message = intentData.getMessage();
 			category = intentData.getCategory();
-			triggerId = intentData.getTriggerId();
+			postId = intentData.getPostId();
 			userFacebookId = intentData.getFacebookId();
 			userLatitude = intentData.getLatitude();
 			userLongitude = intentData.getLongitude();
 			userFullName = intentData.getFirstName() 
 					+ " " + intentData.getLastName();
 			
-			Log.i(TAG, "the geoloqi trigger - " + triggerId);
+			Log.i(TAG, "the post id - " + postId);
 		}
 		catch(Exception e)
 		{
@@ -126,7 +126,7 @@ public class NotificationActivity extends HelplyMapActivity
 		mainUserTxt.setText(userFullName + " Needs Your Help");
 		
 		TextView categoryTxt = (TextView)findViewById(R.id.categoryTxt);
-		categoryTxt.setText(category.toString());
+		categoryTxt.setText(category.getName());
 		
 		TextView messageTxt = (TextView)findViewById(R.id.messageTxt);
 		messageTxt.setText(message);
@@ -147,7 +147,7 @@ public class NotificationActivity extends HelplyMapActivity
 		userImage.setImageBitmap(userImg);
 		
 		addOverlayToMap(userLatitude, userLongitude, 
-				"HELP! " + category.toString(), message, userImg);
+				"HELP! " + category.getName(), message, userImg);
 		
 		zoomMapByLatLon(userLatitude, userLongitude);
     }
@@ -208,9 +208,7 @@ public class NotificationActivity extends HelplyMapActivity
 						"facebookId=" + userFacebookId + "&" +
 						"firstName=" + getMainApplication().getData("firstName") + "&" +
 						"lastName=" + getMainApplication().getData("lastName") + "&" +
-						"latitude=" + latitude + "&" +
-						"longitude=" + longitude + "&" +
-						"triggerId=" + triggerId;
+						"postId=" + postId;
 
 				RestTemplate restTemplate = new RestTemplate();
 				restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());

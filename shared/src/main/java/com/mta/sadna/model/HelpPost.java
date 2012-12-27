@@ -5,11 +5,11 @@ import com.mta.sadna.enums.HelpCategory;
 public class HelpPost
 {
 	private long userId;
-	private String triggerId;
 	private HelpCategory category;
 	private String freeText;
 	private double latitude;
 	private double longitude;
+	private long time;
 	
 	public HelpPost()
 	{
@@ -17,13 +17,14 @@ public class HelpPost
 	}
 	
 	public HelpPost(long userId, HelpCategory category, String freeText,
-			double latitude, double longitude)
+			double latitude, double longitude, long time)
 	{
 		this.userId = userId;
 		this.category = category;
 		this.freeText = freeText;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.time = time;
 	}
 	
 	public long getUserId()
@@ -34,16 +35,6 @@ public class HelpPost
     {
     	this.userId = userId;
     }
-	public String getTriggerId()
-    {
-	    return triggerId;
-    }
-
-	public void setTriggerId(String triggerId)
-    {
-	    this.triggerId = triggerId;
-    }
-
 	public HelpCategory getCategory()
     {
     	return category;
@@ -76,6 +67,14 @@ public class HelpPost
     {
     	this.longitude = longitude;
     }
+	public long getTime()
+    {
+	    return time;
+    }
+	public void setTime(long time)
+    {
+	    this.time = time;
+    }	
 
 	@Override
     public int hashCode()
@@ -89,7 +88,7 @@ public class HelpPost
 	    result = prime * result + (int) (temp ^ (temp >>> 32));
 	    temp = Double.doubleToLongBits(longitude);
 	    result = prime * result + (int) (temp ^ (temp >>> 32));
-	    result = prime * result + ( (triggerId == null) ? 0 : triggerId.hashCode());
+	    result = prime * result + (int) (time ^ (time >>> 32));
 	    result = prime * result + (int) (userId ^ (userId >>> 32));
 	    return result;
     }
@@ -133,14 +132,7 @@ public class HelpPost
 	    {
 		    return false;
 	    }
-	    if (triggerId == null)
-	    {
-		    if (other.triggerId != null)
-		    {
-			    return false;
-		    }
-	    }
-	    else if (!triggerId.equals(other.triggerId))
+	    if (time != other.time)
 	    {
 		    return false;
 	    }
@@ -154,9 +146,8 @@ public class HelpPost
 	@Override
     public String toString()
     {
-	    return "HelpPost [userId=" + userId + ", " + (triggerId != null ? "triggerId=" + triggerId + ", " : "") +
-	            (category != null ? "category=" + category + ", " : "") +
+	    return "HelpPost [userId=" + userId + ", " + (category != null ? "category=" + category + ", " : "") +
 	            (freeText != null ? "freeText=" + freeText + ", " : "") + "latitude=" + latitude + ", longitude=" +
-	            longitude + "]";
-    }	
+	            longitude + ", time=" + time + "]";
+    }
 }

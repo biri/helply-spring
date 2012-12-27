@@ -69,9 +69,14 @@
 		</activity>
 
 		<!-- Geoloqi SDK service -->
-        <service
-            android:name="com.geoloqi.android.sdk.service.LQService"
+        <service android:name="com.geoloqi.android.sdk.service.LQService"
             android:exported="false" />
+	    <receiver android:name=".receiver.LocationReceiver"
+	        android:exported="false">
+	        <intent-filter>
+	            <action android:name="com.geoloqi.android.sdk.action.LOCATION_CHANGED" />
+	        </intent-filter>
+	    </receiver>        
 		
 		<!-- GCM intent service and receiver -->
         <service android:name=".gcm.GCMIntentService" />

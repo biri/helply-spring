@@ -15,7 +15,7 @@ public class NotificationEntity implements Serializable
 	private HelpCategory category;
 	private double latitude;
 	private double longitude;
-	private String triggerId;
+	private String postId;
 	
 	public String getFacebookId()
 	{
@@ -73,13 +73,13 @@ public class NotificationEntity implements Serializable
 	{
 		this.longitude = longitude;
 	}
-	public String getTriggerId()
+	public String getPostId()
 	{
-		return triggerId;
+		return postId;
 	}
-	public void setTriggerId(String triggerId)
+	public void setPostId(String postId)
 	{
-		this.triggerId = triggerId;
+		this.postId = postId;
 	}
 	
 	@Override
@@ -97,7 +97,7 @@ public class NotificationEntity implements Serializable
 	    temp = Double.doubleToLongBits(longitude);
 	    result = prime * result + (int) (temp ^ (temp >>> 32));
 	    result = prime * result + ( (message == null) ? 0 : message.hashCode());
-	    result = prime * result + ( (triggerId == null) ? 0 : triggerId.hashCode());
+	    result = prime * result + ( (postId == null) ? 0 : postId.hashCode());
 	    return result;
     }
 	
@@ -173,14 +173,14 @@ public class NotificationEntity implements Serializable
 	    {
 		    return false;
 	    }
-	    if (triggerId == null)
+	    if (postId == null)
 	    {
-		    if (other.triggerId != null)
+		    if (other.postId != null)
 		    {
 			    return false;
 		    }
 	    }
-	    else if (!triggerId.equals(other.triggerId))
+	    else if (!postId.equals(other.postId))
 	    {
 		    return false;
 	    }
@@ -195,6 +195,6 @@ public class NotificationEntity implements Serializable
 	            (lastName != null ? "lastName=" + lastName + ", " : "") +
 	            (message != null ? "message=" + message + ", " : "") +
 	            (category != null ? "category=" + category + ", " : "") + "latitude=" + latitude + ", longitude=" +
-	            longitude + ", " + (triggerId != null ? "triggerId=" + triggerId : "") + "]";
+	            longitude + ", " + (postId != null ? "triggerId=" + postId : "") + "]";
     }
 }

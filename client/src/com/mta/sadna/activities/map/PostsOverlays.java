@@ -87,7 +87,7 @@ public class PostsOverlays extends ItemizedOverlay<PostOverlayItem> implements A
 		dialog.setTitle(item.getTitle());
 		dialog.setMessage(item.getSnippet());
 		
-		//only if ther is a help post attached
+		//only if there is a help post attached
 		if (item.getHelpPost() != null)
 		{
 			dialog.setNeutralButton("Accept", new OnClickListener()
@@ -169,9 +169,7 @@ public class PostsOverlays extends ItemizedOverlay<PostOverlayItem> implements A
 						"facebookId=" + arg0[0].getUserId() + "&" +
 						"firstName=" + getMainApplication().getData("firstName") + "&" +
 						"lastName=" + getMainApplication().getData("lastName") + "&" +
-						"latitude=" + 0 + "&" +
-						"longitude=" + 0 + "&" +
-						"triggerId=" + arg0[0].getTriggerId();
+						"postId=" + arg0[0].getUserId() + "_" + arg0[0].getTime();
 
 				RestTemplate restTemplate = new RestTemplate();
 				restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());

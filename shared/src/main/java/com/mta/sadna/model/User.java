@@ -8,7 +8,6 @@ public class User
 	private String lastName;
 	private String accessToken;
 	private String gcmRegId;
-	private String geoloqiId;
 	
 	public String getFacebookId()
 	{
@@ -58,14 +57,6 @@ public class User
     {
 	    this.gcmRegId = gcmRegId;
     }
-	public String getGeoloqiId()
-    {
-	    return geoloqiId;
-    }
-	public void setGeoloqiId(String geoloqiId)
-    {
-	    this.geoloqiId = geoloqiId;
-    }
 	
 	@Override
     public int hashCode()
@@ -77,7 +68,6 @@ public class User
 	    result = prime * result + ( (facebookUserName == null) ? 0 : facebookUserName.hashCode());
 	    result = prime * result + ( (firstName == null) ? 0 : firstName.hashCode());
 	    result = prime * result + ( (gcmRegId == null) ? 0 : gcmRegId.hashCode());
-	    result = prime * result + ( (geoloqiId == null) ? 0 : geoloqiId.hashCode());
 	    result = prime * result + ( (lastName == null) ? 0 : lastName.hashCode());
 	    return result;
     }
@@ -153,17 +143,6 @@ public class User
 	    {
 		    return false;
 	    }
-	    if (geoloqiId == null)
-	    {
-		    if (other.geoloqiId != null)
-		    {
-			    return false;
-		    }
-	    }
-	    else if (!geoloqiId.equals(other.geoloqiId))
-	    {
-		    return false;
-	    }
 	    if (lastName == null)
 	    {
 		    if (other.lastName != null)
@@ -187,7 +166,6 @@ public class User
 	            (firstName != null ? "firstName=" + firstName + ", " : "") +
 	            (lastName != null ? "lastName=" + lastName + ", " : "") +
 	            (accessToken != null ? "accessToken=" + accessToken + ", " : "") +
-	            (gcmRegId != null ? "gcmRegId=" + gcmRegId + ", " : "") +
-	            (geoloqiId != null ? "geoloqiId=" + geoloqiId : "") + "]";
+	            (gcmRegId != null ? "gcmRegId=" + gcmRegId + ", " : "") + "]";
     }
 }

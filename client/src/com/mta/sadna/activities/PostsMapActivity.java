@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.StatusLine;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -46,9 +42,6 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.geoloqi.android.sdk.LQException;
-import com.geoloqi.android.sdk.LQSession;
-import com.geoloqi.android.sdk.LQSession.OnRunApiRequestListener;
 import com.google.android.gcm.GCMRegistrar;
 import com.mta.sadna.R;
 import com.mta.sadna.activities.map.HelplyMapActivity;
@@ -59,7 +52,6 @@ import com.mta.sadna.model.User;
 public class PostsMapActivity extends HelplyMapActivity
 {
 	private View popupLayout;
-	private LQSession geoLoqiBinding;
 	protected static final String TAG = PostsMapActivity.class.getSimpleName();
 
 	@Override
@@ -71,10 +63,6 @@ public class PostsMapActivity extends HelplyMapActivity
 	@Override
 	protected void init()
 	{
-		// get geo loqi binding and credentials
-		geoLoqiBinding = getMainApplication().getGeoLoqiBinding();
-		getGeoLoqiUserId();
-
 		// register user to GCM
 		registerGcmClient();
 
@@ -94,21 +82,6 @@ public class PostsMapActivity extends HelplyMapActivity
 	protected void doOnLocationChanged(Location location)
 	{
 		new GetNearbyPostsTask().execute();
-	}
-
-	@Override
-	protected void onDescendantDestory()
-	{
-		getMainApplication().releaseGeoLoqiBinding();
-	}
-
-	private void getGeoLoqiUserId()
-	{
-		if (getMainApplication().getData("geoloqiId") == null)
-		{
-			Log.i(TAG, "About to get Geoloqi info");
-			getMainApplication().addData("geoloqiId", geoLoqiBinding.getUserId());
-		}
 	}
 
 	private void registerGcmClient()
@@ -288,8 +261,8 @@ public class PostsMapActivity extends HelplyMapActivity
 				User user = buildUserFromSession();
 				Log.i(TAG, "about to check if user " + user.getFacebookId() + " already exists");
 				final String url =
-				        getMainApplication().getRestBaseUrl() + "/getuserbyfacebookid" + "?facebookId=" +
-				                user.getFacebookId() + "&geoloqiId=" + user.getGeoloqiId();
+				        getMainApplication().getRestBaseUrl() + "/getuserbyfacebookid"
+				        		+ "?facebookId=" + user.getFacebookId();
 
 				// Create a new RestTemplate instance
 				RestTemplate restTemplate = new RestTemplate();
@@ -337,7 +310,6 @@ public class PostsMapActivity extends HelplyMapActivity
 			user.setLastName(getMainApplication().getData("lastName").toString());
 			user.setAccessToken(getMainApplication().getData("accessToken").toString());
 			user.setGcmRegId(getMainApplication().getData("gcmRegId").toString());
-			user.setGeoloqiId(getMainApplication().getData("geoloqiId").toString());
 			return user;
 		}
 	}
@@ -445,7 +417,7 @@ public class PostsMapActivity extends HelplyMapActivity
 
 			for (HelpPost helpPost : result)
 			{
-				addOverlayToMap(helpPost.getLatitude(), helpPost.getLongitude(), helpPost.getCategory().toString(),
+				addOverlayToMap(helpPost.getLatitude(), helpPost.getLongitude(), helpPost.getCategory().getName(),
 				        helpPost.getFreeText(), helpPost, userProfileImage.get(helpPost.getUserId()));
 			}
 
@@ -463,7 +435,6 @@ public class PostsMapActivity extends HelplyMapActivity
 
 	private class PostHelpTask extends AsyncTask<Void, Void, Boolean>
 	{
-		private String placeId;
 		private HelpPost helpPost;
 
 		@Override
@@ -510,123 +481,21 @@ public class PostsMapActivity extends HelplyMapActivity
 		@Override
 		protected Boolean doInBackground(Void... params)
 		{
-			// create facebook post
+			// create Facebook post
 			facebookApi.feedOperations().updateStatus(
-			        helpPost.getUserId() + "-" + helpPost.getCategory() + "-" + helpPost.getFreeText());
+			        helpPost.getUserId() + "-" + helpPost.getCategory().getName() 
+			        + "-" + helpPost.getFreeText());
 
-			// create geoloqi layer place and trigger
-			buildGeoLoqiPlace();
+			// save post to DB
+			saveHelpPostToDB();
 
 			return true;
 		}
 
-		private void buildGeoLoqiPlace()
-		{
-			JSONObject placeJson = new JSONObject();
-			try
-			{
-				placeJson.put("latitude", latitude);
-				placeJson.put("longitude", longitude);
-				placeJson.put("radius", 500);
-				placeJson.put("description", getFacebookId());
-				placeJson.put("name", helpPost.getFreeText() + "-------" + helpPost.getCategory());
-			}
-			catch (JSONException e)
-			{
-				Log.e(TAG, "Failed to create place json - " + e.getMessage());
-				return;
-			}
-
-			geoLoqiBinding.runPostRequest("place/create", placeJson, new OnRunApiRequestListener()
-			{
-				@Override
-				public void onComplete(LQSession arg0, JSONObject arg1, Header[] arg2, StatusLine arg3)
-				{
-					Log.i(TAG, "Successfully completed creating place");
-				}
-
-				@Override
-				public void onFailure(LQSession arg0, LQException e)
-				{
-					Log.e(TAG, "Failed to create place - " + e.getMessage());
-				}
-
-				@Override
-				public void onSuccess(LQSession arg0, JSONObject arg1, Header[] arg2)
-				{
-					try
-					{
-						placeId = arg1.getString("place_id");
-						Log.i(TAG, "place_id=" + placeId);
-						buildGeoLoqiTrigger();
-					}
-					catch (JSONException e)
-					{
-						Log.e(TAG, "Failed to get place id," + "trigger won't be created - " + e.getMessage());
-					}
-				}
-			});
-		}
-
-		private void buildGeoLoqiTrigger()
-		{
-			JSONObject triggerJson = new JSONObject();
-			try
-			{
-				triggerJson.put("place_id", placeId);
-				triggerJson.put("type", "callback");
-				triggerJson.put("url", getMainApplication().getFromProperties("geoloqi_invoke_url"));
-			}
-			catch (JSONException e)
-			{
-				Log.e(TAG, "Failed to create trigger json - " + e.getMessage());
-				return;
-			}
-
-			geoLoqiBinding.runPostRequest("trigger/create", triggerJson, new OnRunApiRequestListener()
-			{
-				@Override
-				public void onComplete(LQSession arg0, JSONObject arg1, Header[] arg2, StatusLine arg3)
-				{
-					Log.i(TAG, "successfully created trigger");
-				}
-
-				@Override
-				public void onFailure(LQSession arg0, LQException e)
-				{
-					Log.e(TAG, "Failed to create trigger - " + e.getMessage());
-				}
-
-				@Override
-				public void onSuccess(LQSession arg0, final JSONObject arg1, Header[] arg2)
-				{
-					Thread trd = new Thread(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							try
-							{
-								String triggerId = arg1.getString("trigger_id");
-								Log.i(TAG, "trigger_id=" + triggerId);
-								saveHelpPostToDB(triggerId);
-							}
-							catch (JSONException e)
-							{
-								Log.e(TAG, "Failed to get the " + "trigger id - " + e.getMessage());
-							}
-						}
-					});
-					trd.start();
-				}
-			});
-		}
-
-		private void saveHelpPostToDB(String triggerId)
+		private void saveHelpPostToDB()
 		{
 			try
 			{
-				helpPost.setTriggerId(triggerId);
 				final String url = getMainApplication().getRestBaseUrl() + "/posthelp";
 
 				HttpHeaders requestHeaders = new HttpHeaders();

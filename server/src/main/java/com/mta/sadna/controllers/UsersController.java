@@ -1,4 +1,4 @@
-package com.mta.sadna;
+package com.mta.sadna.controllers;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
@@ -32,8 +32,7 @@ public class UsersController
 	
 	@RequestMapping(value = "getuserbyfacebookid", method = RequestMethod.GET)
 	public @ResponseBody
-	String getUserByFacebookId(@RequestParam(required=true) String facebookId,
-			@RequestParam(required=true) String geoloqiId) 
+	String getUserByFacebookId(@RequestParam(required=true) String facebookId) 
 			throws ElasticSearchException, IOException
 	{
 		logger.info("Checking if user " + facebookId + "  alredy exists");
@@ -58,35 +57,18 @@ public class UsersController
 			return null;
 		}		
 		
-		logger.info("User " + facebookId + "  was found. Results = " + hits.length);
+		logger.info("User " + facebookId + "  was found");
 		JsonElement jsonElement = gson.
 				fromJson(hits[0].getSourceAsString(), JsonElement.class);
-		String geoloqiIdFromDb = jsonElement.getAsJsonObject().get("geoloqiId").getAsString();
-		if (!geoloqiId.equalsIgnoreCase(geoloqiIdFromDb))
-		{
-			logger.info("Geoloqi Id doesn't match, deleting user");
-			deleteUser(facebookId);
-			return null;
-		}
 		return jsonElement.getAsJsonObject().get("facebookId").getAsString();
 	}
 	
-	private void deleteUser(String facebookId)
-    {
-		logger.info("About to delete user - " + facebookId);
-		Node node = nodeBuilder().client(true).node();
-		Client client = node.client();
-		client.prepareDelete("users", "user", facebookId).execute();
-		client.close();
-		logger.info("Deleted user - " + facebookId);
-    }
 
 	@RequestMapping(value = "saveuser", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
 	Boolean saveUser(@RequestBody User user) throws ElasticSearchException, IOException
 	{
-		logger.info("About to save user - " + user.getFacebookId() +
-				" -- " + user.getGeoloqiId());
+		logger.info("About to save user - " + user.getFacebookId());
 		Node node = nodeBuilder().client(true).node();
 		Client client = node.client();
 
@@ -100,14 +82,12 @@ public class UsersController
                     .field("lastName", user.getLastName())
                     .field("accessToken", user.getAccessToken())
                     .field("gcmRegId", user.getGcmRegId())
-                    .field("geoloqiId", user.getGeoloqiId())
                 .endObject())
 		    .execute()
 		    .actionGet();
 
 		client.close();
-		logger.info("Saved user - " + user.getFacebookId() +
-				" -- " + user.getGeoloqiId());
+		logger.info("Saved user - " + user.getFacebookId());
 		return true;
 	}
 }
