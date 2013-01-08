@@ -74,6 +74,9 @@ public class PostsMapActivity extends HelplyMapActivity
 
 		// bind add new help post button
 		bindAddHelpBtn();
+		
+		//bind show help btn
+		bindShowHelpBtn();		
 
 		new SaveUserTask().execute();
 	}
@@ -162,12 +165,25 @@ public class PostsMapActivity extends HelplyMapActivity
 			@Override
 			public void onClick(View v)
 			{
-				showPopup(PostsMapActivity.this);
+				showAddHelpPopup(PostsMapActivity.this);
 			}
 		});
 	}
+	
+	private void bindShowHelpBtn()
+	{
+		ImageButton helpBtn = (ImageButton) findViewById(R.id.help);
+		helpBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				showHelpPopup(PostsMapActivity.this);
+			}
+		});
+	}	
 
-	private void showPopup(final Activity context)
+	private void showAddHelpPopup(final Activity context)
 	{
 		//get the screen size
 		Display display = getWindowManager().getDefaultDisplay();
@@ -207,6 +223,34 @@ public class PostsMapActivity extends HelplyMapActivity
 				popup.dismiss();
 			}
 		});
+	}
+	
+	private void showHelpPopup(final Activity context)
+	{
+		//get the screen size
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int screenWidth = size.x;
+		int screenHeight = size.y;
+
+		// Inflate the post_help_layout.xml
+		LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.helpPopup);
+		LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		popupLayout = layoutInflater.inflate(R.layout.help_page_layout, viewGroup);
+
+		// Creating the PopupWindow
+		final PopupWindow popup = new PopupWindow(context);
+		popup.setContentView(popupLayout);
+		popup.setWidth(screenWidth-50);
+		popup.setHeight(screenHeight-300);
+		popup.setFocusable(true);
+
+		// Clear the default translucent background
+		popup.setBackgroundDrawable(new BitmapDrawable(context.getResources()));
+
+		// Displaying the popup at the specified location, + offsets.
+		popup.showAtLocation(popupLayout, Gravity.CENTER, 0, 0);
 	}
 
 	private String getFacebookId()

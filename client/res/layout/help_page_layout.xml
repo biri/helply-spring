@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/helpPopup"
+    android:background="@drawable/popup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"     
+    android:orientation="vertical">
+   
+    <TextView
+        android:id="@+id/mainTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000"
+        android:text="How To Use"/>
+    
+    <TextView
+        android:id="@+id/postHelpTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:textColor="#000000"
+        android:text="Post Help"/>
+    
+    <TextView
+        android:id="@+id/postHelpContent1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000" 
+        android:text="* On main page click the bottom left button"/>
+    
+    <TextView
+        android:id="@+id/postHelpContent2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* Enter free text for your post"/>    
+        
+    <TextView
+        android:id="@+id/postHelpContent3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* Select post category"/>  
+        
+    <TextView
+        android:id="@+id/postHelpContent4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* Post your help and wait for your Savior"/>       
+        
+    <TextView
+        android:id="@+id/helpAFriendTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:textColor="#000000"
+        android:text="Help A Friend"/>
+    
+    <TextView
+        android:id="@+id/helpAFriendMethod1Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:textColor="#000000"
+        android:text="Method 1"/>     
+        
+    <TextView
+        android:id="@+id/helpFriendMethod1Content1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* On the map find the friend you want to help"/>
+    
+    <TextView
+        android:id="@+id/helpFriendMethod1Content2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* Click his picture and accept help"/>
+    
+    <TextView
+        android:id="@+id/helpFriendMethod1Content3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* If you accepted, the user will be notified"/>     
+    
+    <TextView
+        android:id="@+id/helpAFriendMethod2Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:textColor="#000000"
+        android:text="Method 2"/>     
+        
+    <TextView
+        android:id="@+id/helpFriendMethod2Content1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* When you are nearyby a friend in need"/>
+    
+    <TextView
+        android:id="@+id/helpFriendMethod2Content2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* A notification will popup with help details"/> 
+        
+    <TextView
+        android:id="@+id/helpFriendMethod2Content3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* Review details and either accept or ignore"/> 
+        
+    <TextView
+        android:id="@+id/helpFriendMethod2Content4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:textColor="#000000"
+        android:text="* If you accepted, the user will be notified"/>      
+    
+</LinearLayout>

@@ -18,6 +18,16 @@
 		    android:layout_marginRight="5dp"
 		    android:background="@drawable/main_btn"
 		    android:text="Sign Out" />
+		
+        <ImageButton
+            android:id="@+id/help"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/blackgrunge"
+            android:contentDescription="help"
+            android:src="@drawable/help" />		
 	           
     </RelativeLayout>
     

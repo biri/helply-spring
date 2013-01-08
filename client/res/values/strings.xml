@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Helply</string>
     <string name="helpTxtHint">What do you need help with?</string>
-    <string name="googleMapApiKey">0XGLEZArObE7H83pVw0qd0zzW37FKjzczHbvMFw</string>
+    <string name="googleMapApiKey">0XGLEZArObE5YRl7WL5vg0yVr6-y7mpJ4KRox9A</string>
 
     <string-array name="main_menu_items">
         <item>Post Help</item>
